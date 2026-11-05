@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Congo-gain</title>
+<style>
+body{font-family:Arial;background:#0a0f1e;color:white;margin:0}
+header{background:#ffcc00;color:black;padding:15px;text-align:center}
+.balance{background:#1a2340;margin:15px;padding:15px;border-radius:10px;text-align:center}
+.match{background:white;color:black;margin:15px;padding:15px;border-radius:10px}
+.cotes{display:flex;gap:10px}
+.cotes button{flex:1;padding:12px;background:#0a0f1e;color:white;border:none;border-radius:8px;font-weight:bold}
+.btn-parier{width:100%;padding:15px;background:#ffcc00;border:none;border-radius:10px;font-weight:bold;margin-top:10px}
+</style>
+</head>
+<body>
+<header><h1>🇨🇬 CONGO-GAIN</h1><p>Paris Sportifs - Brazzaville</p></header>
+<div class="balance"><p>Ton Solde</p><b>0 FCFA</b><br><br><button style="padding:10px;background:#00c853;border:none;border-radius:8px;color:white;font-weight:bold">+ Recharger Airtel Money</button></div>
+<div class="match"><h3>⚽ Real Madrid vs Barcelone - 20h</h3><div class="cotes"><button>1 : 2.10</button><button>N : 3.20</button><button>2 : 3.50</button></div><button class="btn-parier">PARIER</button></div>
+<div class="match"><h3>⚽ PSG vs Marseille - Demain 21h</h3><div class="cotes"><button>1 : 1.75</button><button>N : 3.80</button><button>2 : 4.50</button></div><button class="btn-parier">PARIER</button></div>
+<div class="match"><h3>🏀 Lakers vs Celtics</h3><div class="cotes"><button>1 : 1.90</button><button>2 : 1.95</button></div><button class="btn-parier">PARIER</button></div>
+</body>
+</html>
