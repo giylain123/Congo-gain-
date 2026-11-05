@@ -3,23 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Congo-gain</title>
+<title>CONGO-GAIN</title>
 <style>
-body{font-family:Arial;background:#f0f0f0;color:#222;margin:0;text-align:center}
+body{font-family:Arial;background:#f0f0f0;margin:0;text-align:center;padding-bottom:30px}
 header{background:#00a651;color:white;padding:15px}
-.balance{background:#ffcc00;margin:15px;padding:15px;border-radius:10px;font-weight:bold}
-button{padding:12px;margin:5px;border:none;border-radius:8px;font-weight:bold}
-.btn1{background:#00a651;color:white}
-.btn2{background:#1a1a1a;color:white}
-.match{background:white;margin:10px;padding:15px;border-radius:10px}
-.cotes{display:flex;gap:10px;justify-content:center}
-.cote{background:#f0f0f0;padding:10px;border-radius:8px;flex:1}
+.balance{background:#ffcc00;margin:15px;padding:15px;border-radius:10px;font-weight:bold;font-size:18px}
+button{padding:12px 18px;margin:5px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn1{background:#00a651;color:white}.btn2{background:#1a1a1a;color:white}
+.match{background:white;margin:10px;padding:15px;border-radius:12px;text-align:left}
+.cotes{display:flex;gap:8px;margin-top:10px}.cote{background:#eee;padding:12px;border-radius:8px;flex:1;text-align:center;cursor:pointer}
+.cote:hover{background:#00a651;color:white}
+input,select{width:90%;padding:12px;margin:6px;border:1px solid #ccc;border-radius:8px}
+.card{background:white;margin:10px;padding:15px;border-radius:12px}
+.hidden{display:none}
+.small{font-size:13px;color:#555}
 </style>
 </head>
 <body>
-<header><h1>CONGO-GAIN</h1><p>Paris Sportifs - Brazzaville</p></header>
-<div class="balance">Solde: 0 FCFA</div>
-<div><button class="btn1">Recharger</button><button class="btn2">Retirer</button></div>
-<div class="match"><h3>🏀 Lakers vs Celtics</h3><div class="cotes"><div class="cote">1 - 1.90</div><div class="cote">2 - 1.85</div></div></div>
+<header><h1>CONGO-GAIN</h1><p>Paris Sportifs - Brazzaville</p><p id="userTxt"></p></header>
+
+<!-- CONNEXION -->
+<div id="auth" class="card">
+<h3>Inscription / Connexion</h3>
+<input id="nom" placeholder="Ton nom ex: Giylain">
+<input id="tel" placeholder="Ton numéro ex: 06 123 45 67">
+<button class="btn1" onclick="login()">Entrer</button>
+<p class="small">Ton compte est sauvegardé sur ton téléphone.</p>
+</div>
+
+<div id="app" class="hidden">
+<div class="balance" id="soldeTxt">Solde: 0 FCFA</div>
+<div>
+<button class="btn1" onclick="showRecharge()">Recharger</button>
+<button class="btn2" onclick="retirer()">Retirer</button>
+<button onclick="logout()">Déconnexion</button>
+</div>
+
+<!-- RECHARGE -->
+<div id="rechargeBox" class="card hidden">
+<h3>Recharger mon compte</h3>
+<select id="operateur"><option value="MTN MoMo">MTN MoMo</option><option value="Airtel Money">Airtel Money</option></select>
+<input id="montant" type="number" placeholder="Montant ex: 1000">
+<input id="numMoMo" placeholder="Numéro MoMo">
+<button class="btn1" onclick="recharger()">Valider Recharge</button>
+<p class="small">Démo : la recharge est ajoutée tout de suite. Pour le vrai paiement, tu devras connecter l'API MoMo plus tard.</p>
+</div>
+
+<h3>🔥 Matchs du jour</h3>
+<div id="matchs"></div>
+
+<div class="card">
+<h3>🎫 Mon Coupon</h3>
+<p id="coupon">Aucun pari. Clique sur une cote.</p>
+<input id="mise" type="number" placeholder="Mise ex: 500">
+<button class="btn1" onclick="parier()">Parier</button>
+<p id="gainTxt"></p>
+</div>
+</div>
+
+<script>
+let solde = parseInt(localStorage.getItem('cg_solde')||'0');
+let nom = localStorage.getItem('cg_nom')||'';
+let coteChoisie = null, matchChoisi = '';
+
+let matchs = [
+{equipe:"⚽ Diables Noirs vs AC Léopards", c1:"1 - 2.10", c2:"X - 3.00", c3:"2 - 3.40"},
+{equipe:"⚽ Congo vs RDC", c1:"1 - 2.50", c2:"X - 2.90", c3:"2 - 2.60"},
+{equipe:"⚽ Real Madrid vs Barça", c1:"1 - 2.20", c2:"X - 3.30", c3:"2 - 3.00"},
+{equipe:"🏀 Lakers vs Celtics", c1:"1 - 1.90", c2:"2 - 1.85", c3:""},
+{equipe:"🏀 Brazzaville Basket vs Pointe-Noire", c1:"1 - 1.70", c2:"2 - 2.10", c3:""},
+];
+
+function afficher(){
+document.getElementById('soldeTxt').innerText = "Solde: "+solde+" FCFA";
+let h="";
+matchs.forEach((m,i)=>{
+h+=`<div class="match"><b>${m.equipe}</b><div class="cotes">
+<div class="cote" onclick="choisir('${m.equipe}','${m.c1}')">${m.c1}</div>
+<div class="cote" onclick="choisir('${m.equipe}','${m.c2}')">${m.c2}</div>
+${m.c3?`<div class="cote" onclick="choisir('${m.equipe}','${m.c3}')">${m.c3}</div>`:''}
+</div></div>`;
+});
+document.getElementById('matchs').innerHTML=h;
+}
+function login(){
+let n=document.getElementById('nom').value;
+let t=document.getElementById('tel').value;
+if(!n||!t){alert("Mets ton nom et ton numéro");return;}
+localStorage.setItem('cg_nom',n); nom=n;
+document.getElementById('auth').classList.add('hidden');
+document.getElementById('app').classList.remove('hidden');
+document.getElementById('userTxt').innerText="Bonjour "+n+" 👋";
+afficher();
+}
+function logout(){localStorage.removeItem('cg_nom');location.reload();}
+function showRecharge(){document.getElementById('rechargeBox').classList.toggle('hidden');}
+function recharger(){
+let m=parseInt(document.getElementById('montant').value);
+let op=document.getElementById('operateur').value;
+if(!m||m<100){alert("Mets au moins 100 FCFA");return;}
+solde+=m; localStorage.setItem('cg_solde',solde); afficher();
+alert(op+" : +"+m+" FCFA ajouté !"); document.getElementById('rechargeBox').classList.add('hidden');
+}
+function retirer(){
+let m=prompt("Montant à retirer ? Solde: "+solde);
+m=parseInt(m); if(!m||m>solde){alert("Montant invalide");return;}
+solde-=m; localStorage.setItem('cg_solde',solde); afficher();
+alert("Retrait de "+m+" FCFA demandé. Tu seras payé par MoMo.");
+}
+function choisir(match,cote){
+matchChoisi=match; coteChoisie=cote;
+document.getElementById('coupon').innerText=match+" -> "+cote;
+let val=parseFloat(cote.split("-")[1]); document.getElementById('gainTxt').innerText="Gain possible : mise x "+val;
+}
+function parier(){
+let mise=parseInt(document.getElementById('mise').value);
+if(!coteChoisie){alert("Choisis d'abord une cote");return;}
+if(!mise||mise>solde){alert("Mise invalide ou solde insuffisant. Recharge d'abord.");return;}
+solde-=mise; localStorage.setItem('cg_solde',solde); afficher();
+alert("Pari validé ! "+mise+" FCFA sur "+matchChoisi+" "+coteChoisie);
+}
+if(nom){document.getElementById('auth').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('userTxt').innerText="Bonjour "+nom+" 👋";afficher();}
+</script>
 </body>
 </html>
