@@ -3,141 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONGO-GAIN PRO - Paris & Casino</title>
+<title>CONGO-GAIN PRO</title>
 <style>
-*{box-sizing:border-box}body{font-family:Arial;background:#0a0f0d;color:white;margin:0;padding-bottom:40px}
+*{box-sizing:border-box}body{font-family:Arial;background:#0a0f0d;color:white;margin:0;padding-bottom:50px}
 header{background:#00a651;padding:12px;text-align:center;position:sticky;top:0;z-index:10}
-header h1{margin:0;font-size:24px;letter-spacing:1px}header p{margin:2px;font-size:12px;opacity:.9}
-.top{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#111}
+.top{display:flex;justify-content:space-between;padding:10px;background:#111;align-items:center}
 .solde{background:#ffcc00;color:#000;padding:10px 14px;border-radius:20px;font-weight:bold}
-button{padding:12px 16px;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
-.btn-green{background:#00a651;color:white}.btn-yellow{background:#ffcc00}.btn-dark{background:#222;color:white}
-.tabs{display:flex;gap:6px;padding:10px;overflow-x:auto;background:#111}
-.tab{padding:10px 16px;background:#222;color:white;border-radius:20px;white-space:nowrap}.tab.active{background:#00a651}
+button{padding:11px 14px;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
+.btn-green{background:#00a651;color:white}.btn-yellow{background:#ffcc00}.btn-dark{background:#222;color:white}.btn-red{background:#e11;color:white}
+.tabs{display:flex;gap:6px;padding:10px;overflow-x:auto;background:#111;position:sticky;top:62px;z-index:9}
+.tab{padding:9px 14px;background:#222;color:white;border-radius:20px;white-space:nowrap}.tab.active{background:#00a651}
 .card{background:#1a1a1a;margin:10px;padding:14px;border-radius:14px}
 input,select{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #333;background:#222;color:white}
-.match{background:#222;margin:8px 0;padding:12px;border-radius:12px}
-.cotes{display:flex;gap:6px;margin-top:8px}.cote{background:#333;padding:10px;flex:1;text-align:center;border-radius:8px;cursor:pointer;font-size:13px}
-.cote:hover{background:#00a651}
+.cotes{display:flex;gap:6px;margin-top:8px}.cote{background:#333;padding:11px;flex:1;text-align:center;border-radius:8px;cursor:pointer}.cote.sel{background:#00a651}
 .hidden{display:none}.center{text-align:center}
-.aviator{height:180px;background:linear-gradient(#0a0f0d,#00a651);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:bold}
-.slot{font-size:40px}
 .badge{background:#ffcc00;color:#000;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:bold}
-.live{color:#ff4444;font-weight:bold}
+.live{color:#ff4444;font-weight:bold}.score{font-size:18px;font-weight:bold;color:#ffcc00}
+.hist{font-size:13px;border-bottom:1px solid #333;padding:6px 0}
+.aviator{height:160px;background:linear-gradient(#0a0f0d,#00a651);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:bold}
 </style>
 </head>
 <body>
-<header><h1>🟢 CONGO-GAIN <span style="color:#ffcc00">PRO</span></h1><p>Paris Sportifs • Casino • Aviator - Brazzaville 🇨🇬</p></header>
+<header><h1>🟢 CONGO-GAIN <span style="color:#ffcc00">PRO</span></h1><p>Paris • Casino • Aviator - Brazzaville 🇨🇬</p></header>
+<div class="top"><div id="userTxt">👤 Invité</div><div class="solde" id="soldeTxt">0 FCFA</div></div>
 
-<div class="top">
-<div id="userTxt">👤 Invité</div>
-<div class="solde" id="soldeTxt">0 FCFA</div>
-</div>
-
-<!-- SECURITE OTP -->
+<!-- AUTH -->
 <div id="auth" class="card">
-<h2>🔐 Sécurité - Vérifie ton numéro</h2>
-<p style="font-size:13px;color:#ccc">Pour jouer, mets ton numéro. Tu vas recevoir un code de confirmation.</p>
-<div id="step1">
-<input id="tel" placeholder="Ex: 06 123 45 67">
-<button class="btn-green" onclick="envoyerCode()" style="width:100%">Envoyer mon code</button>
-</div>
-<div id="step2" class="hidden">
-<p>Code envoyé à <b id="telAffiche"></b></p>
-<input id="codeSaisi" placeholder="Entre le code à 4 chiffres">
-<button class="btn-yellow" onclick="verifierCode()" style="width:100%">Vérifier & Entrer</button>
-<p style="font-size:12px;color:#aaa">Démo : ton code s'affiche en haut de l'écran. En vrai, il arrive par SMS.</p>
-</div>
+<h2>🔐 Inscription / Connexion</h2>
+<div id="step1"><input id="nom" placeholder="Ton nom"><input id="tel" placeholder="Téléphone ex: 061234567"><button class="btn-green" onclick="envoyerCode()" style="width:100%">Envoyer code de confirmation</button></div>
+<div id="step2" class="hidden"><p>Code envoyé à <b id="telAffiche"></b></p><input id="codeSaisi" placeholder="Code à 4 chiffres"><button class="btn-yellow" onclick="verifierCode()" style="width:100%">Vérifier & Entrer</button></div>
 <p id="codeDemo" style="color:#ffcc00;font-weight:bold"></p>
+<p style="font-size:12px;color:#aaa">Admin ? Mot de passe : <b>admin123</b> dans le code ci-dessous.</p>
 </div>
 
 <div id="app" class="hidden">
-<div style="padding:0 10px;display:flex;gap:8px">
-<button class="btn-green" onclick="showRecharge()" style="flex:1">💰 Recharger</button>
-<button class="btn-dark" onclick="retirer()" style="flex:1">💸 Retirer</button>
-</div>
+<div style="padding:0 10px;display:flex;gap:6px"><button class="btn-green" onclick="toggle('rechargeBox')" style="flex:1">💰 Dépôt</button><button class="btn-dark" onclick="retirer()" style="flex:1">💸 Retrait</button><button class="btn-yellow" onclick="toggle('histBox')">📜 Historique</button></div>
 
-<div id="rechargeBox" class="card hidden">
-<h3>Recharger - MTN MoMo / Airtel Money</h3>
-<select id="operateur"><option>MTN MoMo</option><option>Airtel Money</option></select>
-<input id="montant" type="number" placeholder="Montant ex: 2000">
-<button class="btn-green" onclick="recharger()" style="width:100%">Valider</button>
-</div>
+<div id="rechargeBox" class="card hidden"><h3>Dépôt MTN MoMo / Airtel Money</h3><select id="operateur"><option>MTN MoMo</option><option>Airtel Money</option></select><input id="montant" type="number" placeholder="Montant ex: 2000"><button class="btn-green" onclick="recharger()" style="width:100%">Valider Dépôt</button></div>
+<div id="histBox" class="card hidden"><h3>📜 Portefeuille - Historique</h3><div id="histList">Aucune transaction</div><button class="btn-red" onclick="logout()">Déconnexion</button></div>
 
 <div class="tabs">
-<div class="tab active" onclick="showTab('sports',this)">⚽ Sports</div>
+<div class="tab active" onclick="showTab('sports',this)">⚽ Football</div>
+<div class="tab" onclick="showTab('live',this)">🔴 En Direct</div>
 <div class="tab" onclick="showTab('casino',this)">🎰 Casino</div>
 <div class="tab" onclick="showTab('aviator',this)">✈️ Aviator</div>
-<div class="tab" onclick="showTab('coupon',this)">🎫 Coupon</div>
+<div class="tab" onclick="showTab('coupon',this)">🎫 Coupon (<span id="nbCoupon">0</span>)</div>
+<div class="tab" onclick="showTab('admin',this)">⚙️ Admin</div>
 </div>
 
-<!-- SPORTS -->
-<div id="tab-sports">
-<div class="card"><span class="live">● LIVE</span> <b>Matchs du jour - Cotes réelles</b></div>
-<div id="matchs"></div>
-</div>
+<div id="tab-sports"><div class="card"><b>🏆 Championnats - Cotes 1, N, 2</b></div><div id="matchs"></div></div>
 
-<!-- CASINO -->
+<div id="tab-live" class="hidden"><div class="card"><b>🔴 Scores en temps réel (démo live)</b><p style="font-size:12px;color:#aaa">Les scores bougent toutes les 5 secondes comme en vrai.</p></div><div id="liveMatchs"></div></div>
+
 <div id="tab-casino" class="hidden">
-<div class="card center"><h3>🎰 Machine à Sous</h3><div class="slot" id="slot">🍒 🍋 🍇</div><p>Mise: 500 FCFA</p><button class="btn-yellow" onclick="jouerSlot()">JOUER</button><p id="slotRes"></p></div>
-<div class="card center"><h3>🎲 Roulette Congo</h3><p>Choisis Rouge ou Noir</p><button class="btn-green" onclick="roulette('rouge')">🔴 Rouge x2</button><button class="btn-dark" onclick="roulette('noir')">⚫ Noir x2</button><p id="rouletteRes"></p></div>
+<div class="card center"><h3>🎰 Machine à Sous</h3><div style="font-size:40px" id="slot">🍒 🍋 🍇</div><button class="btn-yellow" onclick="jouerSlot()">JOUER 500 FCFA</button><p id="slotRes"></p></div>
+<div class="card center"><h3>🎲 Roulette</h3><button class="btn-green" onclick="roulette('rouge')">🔴 Rouge x2</button><button class="btn-dark" onclick="roulette('noir')">⚫ Noir x2</button><p id="rouletteRes"></p></div>
 </div>
 
-<!-- AVIATOR -->
-<div id="tab-aviator" class="hidden">
-<div class="card center"><h3>✈️ AVIATOR</h3><div class="aviator" id="aviatorTxt">1.00x</div><p>Mise: <input id="miseAv" type="number" value="500" style="width:100px;display:inline"></p><button class="btn-green" onclick="lancerAviator()">DÉCOLLAGE ✈️</button><button class="btn-yellow" onclick="cashout()">CASHOUT 💰</button><p id="avRes"></p></div>
-</div>
+<div id="tab-aviator" class="hidden"><div class="card center"><h3>✈️ AVIATOR</h3><div class="aviator" id="aviatorTxt">1.00x</div><input id="miseAv" type="number" value="500" style="width:120px;display:inline"><br><button class="btn-green" onclick="lancerAviator()">DÉCOLLAGE</button><button class="btn-yellow" onclick="cashout()">CASHOUT 💰</button><p id="avRes"></p></div></div>
 
-<!-- COUPON -->
-<div id="tab-coupon" class="hidden">
-<div class="card"><h3>🎫 Mon Coupon</h3><p id="coupon">Aucun pari. Clique sur une cote.</p><input id="mise" type="number" placeholder="Mise ex: 500"><button class="btn-green" onclick="parier()" style="width:100%">Parier</button><p id="gainTxt"></p></div>
-</div>
+<div id="tab-coupon" class="hidden"><div class="card"><h3>🎫 Coupon Combiné</h3><div id="couponList">Aucun match. Clique sur une cote dans Football.</div><p><b>Cote totale : <span id="coteTotale">1.00</span></b></p><input id="mise" type="number" placeholder="Mise ex: 1000"><p><b>Gain possible : <span id="gainAuto">0</span> FCFA</b> <br><span style="font-size:12px">Calcul automatique : Mise x Cote totale</span></p><button class="btn-green" onclick="parier()" style="width:100%">Valider Coupon Combiné</button><button class="btn-red" onclick="viderCoupon()">Vider Coupon</button></div></div>
+
+<div id="tab-admin" class="hidden"><div class="card"><h3>⚙️ Administration</h3><input id="mdpAdmin" type="password" placeholder="Mot de passe admin"><button class="btn-dark" onclick="loginAdmin()" style="width:100%">Entrer Admin</button><div id="adminZone" class="hidden"><p><b>Utilisateurs :</b> <span id="adminUsers"></span></p><p><b>Solde total distribué :</b> <span id="adminSolde"></span></p><p><b>Historique global :</b></p><div id="adminHist"></div><button class="btn-red" onclick="resetAll()">Reset tout (test)</button></div></div></div>
 </div>
 
 <script>
 let solde=parseInt(localStorage.getItem('cg_solde')||'0');
-let codeGen=""; let telUser=localStorage.getItem('cg_tel')||"";
-let coteChoisie=null, matchChoisi="", multi=1, enVol=false, intervalAv=null;
+let hist=JSON.parse(localStorage.getItem('cg_hist')||'[]');
+let coupon=[]; let codeGen=""; let telUser=localStorage.getItem('cg_tel')||""; let nomUser=localStorage.getItem('cg_nom')||"";
+let multi=1,enVol=false,intervalAv=null;
 
 let matchs=[
-{ligue:"🇨🇬 LINAFOOT - CONGO", equipe:"Diables Noirs vs AC Léopards", c1:"1 - 2.10", c2:"N - 3.00", c3:"2 - 3.40"},
-{ligue:"🌍 CAN QUALIF", equipe:"Congo 🇨🇬 vs RDC 🇨🇩", c1:"1 - 2.55", c2:"N - 2.90", c3:"2 - 2.65"},
-{ligue:"🇫🇷 LIGUE 1", equipe:"PSG vs Marseille", c1:"1 - 1.75", c2:"N - 3.80", c3:"2 - 4.50"},
-{ligue:"🏴 PREMIER LEAGUE", equipe:"Arsenal vs Chelsea", c1:"1 - 2.20", c2:"N - 3.30", c3:"2 - 3.10"},
-{ligue:"🇪🇸 LA LIGA", equipe:"Real Madrid vs Barça", c1:"1 - 2.30", c2:"N - 3.40", c3:"2 - 2.90"},
-{ligue:"🏀 NBA", equipe:"Lakers vs Celtics", c1:"1 - 1.90", c2:"2 - 1.85", c3:""},
-{ligue:"🏀 NBA", equipe:"Warriors vs Bulls", c1:"1 - 1.65", c2:"2 - 2.20", c3:""},
+{ligue:"🇨🇬 LINAFOOT", eq:"Diables Noirs vs AC Léopards", s1:1,s2:0, c1:2.10,cN:3.00,c2:3.40},
+{ligue:"🌍 CAN", eq:"Congo vs RDC", s1:0,s2:0, c1:2.55,cN:2.90,c2:2.65},
+{ligue:"🇫🇷 LIGUE 1", eq:"PSG vs Marseille", s1:2,s2:1, c1:1.75,cN:3.80,c2:4.50},
+{ligue:"🏴 PREMIER LEAGUE", eq:"Arsenal vs Chelsea", s1:1,s2:1, c1:2.20,cN:3.30,c2:3.10},
+{ligue:"🇪🇸 LA LIGA", eq:"Real Madrid vs Barça", s1:0,s2:0, c1:2.30,cN:3.40,c2:2.90},
+{ligue:"🏀 NBA", eq:"Lakers vs Celtics", s1:45,s2:42, c1:1.90,cN:0,c2:1.85},
 ];
 
-function majSolde(){document.getElementById('soldeTxt').innerText=solde+" FCFA"; localStorage.setItem('cg_solde',solde);}
-function envoyerCode(){
-let t=document.getElementById('tel').value;
-if(t.length<9){alert("Mets un vrai numéro ex: 061234567");return;}
-telUser=t; codeGen=String(Math.floor(1000+Math.random()*9000));
-document.getElementById('step1').classList.add('hidden');
-document.getElementById('step2').classList.remove('hidden');
-document.getElementById('telAffiche').innerText=t;
-document.getElementById('codeDemo').innerText="🔑 TON CODE DÉMO : "+codeGen+" (en vrai il arrive par SMS)";
-}
-function verifierCode(){
-let s=document.getElementById('codeSaisi').value;
-if(s==codeGen){localStorage.setItem('cg_tel',telUser);
-document.getElementById('auth').classList.add('hidden');document.getElementById('app').classList.remove('hidden');
-document.getElementById('userTxt').innerText="👤 "+telUser+" ✅ Vérifié";afficher();majSolde();
-}else{alert("Code faux. Recommence.");}
-}
-function showTab(id,el){['sports','casino','aviator','coupon'].forEach(x=>document.getElementById('tab-'+x).classList.add('hidden'));document.getElementById('tab-'+id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
-function afficher(){let h="";matchs.forEach(m=>{h+=`<div class="card match"><span class="badge">${m.ligue}</span><br><b>${m.equipe}</b><div class="cotes"><div class="cote" onclick="choisir('${m.equipe}','${m.c1}')">${m.c1}</div><div class="cote" onclick="choisir('${m.equipe}','${m.c2}')">${m.c2}</div>${m.c3?`<div class="cote" onclick="choisir('${m.equipe}','${m.c3}')">${m.c3}</div>`:''}</div></div>`});document.getElementById('matchs').innerHTML=h;}
-function choisir(m,c){matchChoisi=m;coteChoisie=c;document.getElementById('coupon').innerText=m+" -> "+c;showTab('coupon',document.querySelectorAll('.tab')[3]);}
-function parier(){let mise=parseInt(document.getElementById('mise').value);if(!coteChoisie){alert("Choisis une cote");return;}if(!mise||mise>solde){alert("Recharge d'abord");return;}solde-=mise;majSolde();alert("Pari validé : "+mise+" FCFA sur "+matchChoisi);}
-function showRecharge(){document.getElementById('rechargeBox').classList.toggle('hidden');}
-function recharger(){let m=parseInt(document.getElementById('montant').value);if(!m||m<100){alert("Min 100");return;}solde+=m;majSolde();alert(document.getElementById('operateur').value+" : +"+m+" FCFA");}
-function retirer(){let m=parseInt(prompt("Retrait ? Solde: "+solde));if(!m||m>solde){alert("Invalide");return;}solde-=m;majSolde();alert("Retrait "+m+" FCFA demandé vers "+telUser);}
-function jouerSlot(){if(solde<500){alert("Recharge");return;}solde-=500;let e=["🍒","🍋","🍇","⭐","💎"];let a=e[Math.floor(Math.random()*5)],b=e[Math.floor(Math.random()*5)],c=e[Math.floor(Math.random()*5)];document.getElementById('slot').innerText=a+" "+b+" "+c;if(a==b&&b==c){solde+=2500;document.getElementById('slotRes').innerText="JACKPOT ! +2500 FCFA 🎉";}else if(a==b||b==c){solde+=1000;document.getElementById('slotRes').innerText="Gagné +1000";}else{document.getElementById('slotRes').innerText="Perdu, réessaie";}majSolde();}
-function roulette(ch){if(solde<500){alert("Recharge");return;}solde-=500;let res=Math.random()>0.5?"rouge":"noir";if(res==ch){solde+=1000;document.getElementById('rouletteRes').innerText="Gagné ! C'était "+res+" +1000 FCFA";}else{document.getElementById('rouletteRes').innerText="Perdu, c'était "+res;}majSolde();}
-function lancerAviator(){if(enVol)return;let mise=parseInt(document.getElementById('miseAv').value);if(!mise||mise>solde){alert("Recharge");return;}solde-=mise;majSolde();multi=1;enVol=true;document.getElementById('avRes').innerText="En vol... Cashout avant le crash !";intervalAv=setInterval(()=>{multi+=0.1;document.getElementById('aviatorTxt').innerText=multi.toFixed(2)+"x ✈️";if(Math.random()<0.02||multi>8){clearInterval(intervalAv);enVol=false;document.getElementById('avRes').innerText="💥 CRASH à "+multi.toFixed(2)+"x - Tu as perdu "+mise+" FCFA";document.getElementById('aviatorTxt').innerText="CRASH !";}},200);}
-function cashout(){if(!enVol){alert("Lance d'abord");return;}clearInterval(intervalAv);enVol=false;let mise=parseInt(document.getElementById('miseAv').value);let gain=Math.floor(mise*multi);solde+=gain;majSolde();document.getElementById('avRes').innerText="Cashout à "+multi.toFixed(2)+"x ! +"+gain+" FCFA 🎉";}
-if(telUser){document.getElementById('auth').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('userTxt').innerText="👤 "+telUser+" ✅ Vérifié";afficher();majSolde();}
+function maj(){document.getElementById('soldeTxt').innerText=solde+" FCFA";localStorage.setItem('cg_solde',solde);localStorage.setItem('cg_hist',JSON.stringify(hist));let h=hist.slice().reverse().map(x=>`<div class="hist">${x}</div>`).join('')||"Aucune transaction";document.getElementById('histList').innerHTML=h;}
+function addHist(t){hist.push(new Date().toLocaleTimeString()+" - "+t);maj();}
+function envoyerCode(){let t=document.getElementById('tel').value;let n=document.getElementById('nom').value;if(t.length<9||!n){alert("Mets nom + numéro");return;}telUser=t;nomUser=n;codeGen=String(Math.floor(1000+Math.random()*9000));document.getElementById('step1').classList.add('hidden');document.getElementById('step2').classList.remove('hidden');document.getElementById('telAffiche').innerText=t;document.getElementById('codeDemo').innerText="🔑 CODE DÉMO : "+codeGen;}
+function verifierCode(){if(document.getElementById('codeSaisi').value==codeGen){localStorage.setItem('cg_tel',telUser);localStorage.setItem('cg_nom',nomUser);entrer();}else alert("Code faux");}
+function entrer(){document.getElementById('auth').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('userTxt').innerText="👤 "+nomUser+" - "+telUser+" ✅";afficher();afficherLive();maj();majCoupon();}
+function logout(){localStorage.clear();location.reload();}
+function toggle(id){document.getElementById(id).classList.toggle('hidden');}
+function showTab(id,el){['sports','live','casino','aviator','coupon','admin'].forEach(x=>document.getElementById('tab-'+x).classList.add('hidden'));document.getElementById('tab-'+id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+function afficher(){let h="";matchs.forEach((m,i)=>{h+=`<div class="card"><span class="badge">${m.ligue}</span> <b>${m.eq}</b><div class="cotes"><div class="cote" onclick="addCoupon(${i},'1',${m.c1})">1 - ${m.c1}</div><div class="cote" onclick="addCoupon(${i},'N',${m.cN})">N - ${m.cN}</div>${m.c2?`<div class="cote" onclick="addCoupon(${i},'2',${m.c2})">2 - ${m.c2}</div>`:''}</div></div>`});document.getElementById('matchs').innerHTML=h;}
+function afficherLive(){let h="";matchs.forEach(m=>{h+=`<div class="card"><span class="live">● LIVE ${Math.floor(Math.random()*80)+1}'</span> <b>${m.eq}</b><div class="score">${m.s1} - ${m.s2}</div></div>`});document.getElementById('liveMatchs').innerHTML=h;}
+setInterval(()=>{matchs.forEach(m=>{if(Math.random()<0.3){if(Math.random()<0.5)m.s1++;else m.s2++;}});if(document.getElementById('app')&&!document.getElementById('app').classList.contains('hidden'))afficherLive();},5000);
+function addCoupon(i,choix,cote){let m=matchs[i];let exist=coupon.findIndex(x=>x.eq==m.eq);if(exist>=0)coupon[exist]={eq:m.eq,choix,cote};else coupon.push({eq:m.eq,choix,cote});majCoupon();alert("Ajouté : "+m.eq+" -> "+choix+" @"+cote);}
+function majCoupon(){document.getElementById('nbCoupon').innerText=coupon.length;let tot=1;let h=coupon.map(c=>{tot*=c.cote;return `<div class="hist">${c.eq} → ${c.choix} @${c.cote}</div>`}).join('')||"Aucun match";document.getElementById('couponList').innerHTML=h;document.getElementById('coteTotale').innerText=tot.toFixed(2);let mise=parseInt(document.getElementById('mise')?.value||0);document.getElementById('gainAuto').innerText=Math.floor(mise*tot);}
+document.addEventListener('input',e=>{if(e.target.id=='mise')majCoupon();});
+function viderCoupon(){coupon=[];majCoupon();}
+function parier(){let mise=parseInt(document.getElementById('mise').value);if(!coupon.length){alert("Choisis des matchs");return;}if(!mise||mise>solde){alert("Recharge d'abord");return;}let tot=parseFloat(document.getElementById('coteTotale').innerText);solde-=mise;addHist("Pari combiné -"+mise+" FCFA - Gain possible "+Math.floor(mise*tot));alert("Coupon validé ! Gain possible : "+Math.floor(mise*tot)+" FCFA");viderCoupon();}
+function recharger(){let m=parseInt(document.getElementById('montant').value);if(!m||m<100){alert("Min 100");return;}solde+=m;addHist("Dépôt "+document.getElementById('operateur').value+" +"+m+" FCFA");alert("Dépôt +"+m+" FCFA ✅");}
+function retirer(){let m=parseInt(prompt("Retrait ? Solde: "+solde));if(!m||m>solde){alert("Invalide");return;}solde-=m;addHist("Retrait demandé -"+m+" FCFA vers "+telUser);alert("Retrait "+m+" demandé");}
+function jouerSlot(){if(solde<500){alert("Recharge");return;}solde-=500;let e=["🍒","🍋","🍇","⭐","💎"];let a=e[Math.floor(Math.random()*5)],b=e[Math.floor(Math.random()*5)],c=e[Math.floor(Math.random()*5)];document.getElementById('slot').innerText=a+" "+b+" "+c;if(a==b&&b==c){solde+=2500;document.getElementById('slotRes').innerText="JACKPOT +2500 🎉";addHist("Casino Slot +2500");}else if(a==b||b==c){solde+=1000;document.getElementById('slotRes').innerText="Gagné +1000";addHist("Casino Slot +1000");}else{document.getElementById('slotRes').innerText="Perdu";}maj();}
+function roulette(ch){if(solde<500){alert("Recharge");return;}solde-=500;let res=Math.random()>0.5?"rouge":"noir";if(res==ch){solde+=1000;document.getElementById('rouletteRes').innerText="Gagné +1000 ("+res+")";addHist("Roulette +1000");}else{document.getElementById('rouletteRes').innerText="Perdu ("+res+")";}maj();}
+function lancerAviator(){if(enVol)return;let mise=parseInt(document.getElementById('miseAv').value);if(!mise||mise>solde){alert("Recharge");return;}solde-=mise;maj();multi=1;enVol=true;intervalAv=setInterval(()=>{multi+=0.1;document.getElementById('aviatorTxt').innerText=multi.toFixed(2)+"x ✈️";if(Math.random()<0.02||multi>8){clearInterval(intervalAv);enVol=false;document.getElementById('avRes').innerText="💥 CRASH "+multi.toFixed(2)+"x - Perdu "+mise;addHist("Aviator Crash -"+mise);}},200);}
+function cashout(){if(!enVol){alert("Lance d'abord");return;}clearInterval(intervalAv);enVol=false;let mise=parseInt(document.getElementById('miseAv').value);let gain=Math.floor(mise*multi);solde+=gain;maj();document.getElementById('avRes').innerText="Cashout "+multi.toFixed(2)+"x +"+gain+" 🎉";addHist("Aviator Cashout +"+gain);}
+function loginAdmin(){if(document.getElementById('mdpAdmin').value=="admin123"){document.getElementById('adminZone').classList.remove('hidden');document.getElementById('adminUsers').innerText=nomUser+" ("+telUser+")";document.getElementById('adminSolde').innerText=solde+" FCFA";document.getElementById('adminHist').innerHTML=hist.map(x=>`<div class="hist">${x}</div>`).join('');}else alert("Mot de passe faux");}
+function resetAll(){if(confirm("Effacer tout ?")){localStorage.clear();location.reload();}}
+if(telUser)entrer();
 </script>
 </body>
 </html>
